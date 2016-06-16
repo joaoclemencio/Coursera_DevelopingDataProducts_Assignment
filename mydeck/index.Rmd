@@ -1,0 +1,62 @@
+---
+title       : Assignment for Developing Data Products module
+subtitle    : 
+author      : Joao Clemencio
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Read-And-Delete
+
+1. Edit YAML front matter
+2. Write using R Markdown
+3. Use an empty line followed by three dashes to separate slides!
+
+--- .class #id 
+
+## Second slide y'all
+
+Don't really know what to say... here's a chart I guess
+
+```{r what, echo=FALSE, fig.align='center', fig.height=6, fig.width=13}
+library(ggplot2)
+data(iris)
+
+qplot(Sepal.Length, Sepal.Width, data = iris, color=Species)
+
+```
+
+---
+
+## Slide 3
+
+What to say here
+I wonder if you can use manipulate
+
+```{r manip, echo=FALSE}
+
+library(manipulate)
+
+manipulate(ggplot(iris, aes(Sepal.Length, Sepal.Width, color=Species, size = Petal.Width )) + geom_point() + scale_size(range = c(1, x)), x = slider(5, 15, step = 0.1))
+
+```
+
+---
+
+## Slide 4
+
+I guess not...
+
+--- 
+
+## Slide 5?
+
+* This
+  * should be
+      * the last
+          * slide
