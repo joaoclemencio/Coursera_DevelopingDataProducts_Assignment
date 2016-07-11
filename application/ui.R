@@ -1,5 +1,7 @@
 library(shiny)
-library(rattle)
+library(caret)
+library(rpart)
+library(e1071)
 
 shinyUI(
   pageWithSidebar(
