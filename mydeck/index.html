@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Assignment for Developing Data Products module</title>
+  <title>Assignment for Developing Data Products</title>
   <meta charset="utf-8">
-  <meta name="description" content="Assignment for Developing Data Products module">
+  <meta name="description" content="Assignment for Developing Data Products">
   <meta name="author" content="Joao Clemencio">
   <meta name="generator" content="slidify" />
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -32,8 +32,8 @@
     <!-- LOGO SLIDE -->
         <slide class="title-slide segue nobackground">
   <hgroup class="auto-fadein">
-    <h1>Assignment for Developing Data Products module</h1>
-    <h2></h2>
+    <h1>Assignment for Developing Data Products</h1>
+    <h2>Predicting Iris with Trees</h2>
     <p>Joao Clemencio<br/></p>
   </hgroup>
   <article></article>  
@@ -43,14 +43,19 @@
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background:;">
   <hgroup>
-    <h2>Read-And-Delete</h2>
+    <h2>Iris analysis with a decision tree model</h2>
   </hgroup>
   <article data-timings="">
-    <ol>
-<li>Edit YAML front matter</li>
-<li>Write using R Markdown</li>
-<li>Use an empty line followed by three dashes to separate slides!</li>
-</ol>
+    <p>The Iris flower dataset is a famous multivariate data set that classifies three very similar species of plants using 4 measurements.</p>
+
+<p>A classifier was built with a decision tree model to allow a user to interactively predict the correct species by selecting values for the 4 possible parameters:</p>
+
+<ul>
+<li>Sepal Length</li>
+<li>Sepal Width</li>
+<li>Petal Length</li>
+<li>Petal Width</li>
+</ul>
 
   </article>
   <!-- Presenter Notes -->
@@ -58,12 +63,12 @@
 
 <slide class="class" id="id" style="background:;">
   <hgroup>
-    <h2>Second slide y&#39;all</h2>
+    <h2>Exploratory analysis</h2>
   </hgroup>
   <article data-timings="">
-    <p>Don&#39;t really know what to say... here&#39;s a chart I guess</p>
+    <p>Here is the relationships between the 4 considered variables, coloured by Species. Some distinct clusters can be observed.</p>
 
-<p><img src="figure/what-1.png" title="plot of chunk what" alt="plot of chunk what" style="display: block; margin: auto;" /></p>
+<p><img src="figure/pairs-1.png" title="plot of chunk pairs" alt="plot of chunk pairs" style="display: block; margin: auto;" /></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -71,13 +76,25 @@
 
 <slide class="" id="slide-3" style="background:;">
   <hgroup>
-    <h2>Slide 3</h2>
+    <h2>Model creation</h2>
   </hgroup>
   <article data-timings="">
-    <p>What to say here
-I wonder if you can use manipulate</p>
+    <p>The model was created using the <code>rpart</code> method from the <code>caret</code> package.</p>
 
-<pre><code>## Error in manipulate(ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species, : The manipulate package must be run from within RStudio
+<pre><code class="r">iris_rpart &lt;- train(Species ~ ., data=iris, method=&quot;rpart&quot;)
+print(iris_rpart$finalModel)
+</code></pre>
+
+<pre><code>## n= 150 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+## 1) root 150 100 setosa (0.33333333 0.33333333 0.33333333)  
+##   2) Petal.Length&lt; 2.45 50   0 setosa (1.00000000 0.00000000 0.00000000) *
+##   3) Petal.Length&gt;=2.45 100  50 versicolor (0.00000000 0.50000000 0.50000000)  
+##     6) Petal.Width&lt; 1.75 54   5 versicolor (0.00000000 0.90740741 0.09259259) *
+##     7) Petal.Width&gt;=1.75 46   1 virginica (0.00000000 0.02173913 0.97826087) *
 </code></pre>
 
   </article>
@@ -86,10 +103,12 @@ I wonder if you can use manipulate</p>
 
 <slide class="" id="slide-4" style="background:;">
   <hgroup>
-    <h2>Slide 4</h2>
+    <h2>Final decision tree</h2>
   </hgroup>
   <article data-timings="">
-    <p>I guess not...</p>
+    <p>Here is the final decision tree</p>
+
+<p><img src="figure/tree-1.png" title="plot of chunk tree" alt="plot of chunk tree" style="display: block; margin: auto;" /></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -97,24 +116,26 @@ I wonder if you can use manipulate</p>
 
 <slide class="" id="slide-5" style="background:;">
   <hgroup>
-    <h2>Slide 5?</h2>
+    <h2>Prediction examples</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li>This
+    <pre><code class="r">iris_mean = data.frame(lapply(iris[,-5], mean)); iris_sd = data.frame(lapply(iris[,-5], sd)); reps = 5
+random_iris = data.frame(
+  Sepal.Length = rnorm(reps, iris_mean$Sepal.Length, iris_sd$Sepal.Length),
+  Sepal.Width  = rnorm(reps, iris_mean$Sepal.Width,  iris_sd$Sepal.Width),
+  Petal.Length = rnorm(reps, iris_mean$Petal.Length, iris_sd$Petal.Length),
+  Petal.Width  = rnorm(reps, iris_mean$Petal.Width,  iris_sd$Petal.Width))
+random_iris$Species_prediction = predict(iris_rpart, random_iris)
+print(random_iris)
+</code></pre>
 
-<ul>
-<li>should be
-
-<ul>
-<li>the last
-
-<ul>
-<li>slide</li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species_prediction
+## 1     6.013464    3.119629     4.185498   1.0774690         versicolor
+## 2     5.350493    3.036795     5.725632   2.9784994          virginica
+## 3     5.774412    2.860563     7.533199   1.5283712         versicolor
+## 4     4.236310    3.643530     3.566638   0.7954387         versicolor
+## 5     5.652879    3.238465     4.538710   2.1374741          virginica
+</code></pre>
 
   </article>
   <!-- Presenter Notes -->
@@ -126,31 +147,31 @@ I wonder if you can use manipulate</p>
     <ul>
       <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Read-And-Delete'>
+        data-slide=1 title='Iris analysis with a decision tree model'>
          1
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Second slide y&#39;all'>
+        data-slide=2 title='Exploratory analysis'>
          2
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='Slide 3'>
+        data-slide=3 title='Model creation'>
          3
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Slide 4'>
+        data-slide=4 title='Final decision tree'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Slide 5?'>
+        data-slide=5 title='Prediction examples'>
          5
       </a>
     </li>
